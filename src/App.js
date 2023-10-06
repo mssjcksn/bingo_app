@@ -49,10 +49,10 @@ function App() {
       .then((response) => {
         if (response.data === 0) {
           alert("Invalid game code!");
-          changeCode();
         } else {
           setGameCode(newCode);
           setBingoCard(response.data);
+          setClickedNumbers({});
         }
       })
       .catch((error) => {
@@ -95,6 +95,7 @@ function App() {
         }
       )
       .then((response) => {
+        setClickedNumbers({});
         setBingoCard(response.data);
       })
       .catch((error) => {
