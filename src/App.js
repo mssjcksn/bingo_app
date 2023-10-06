@@ -7,6 +7,7 @@ function App() {
   const [gameCode, setGameCode] = useState("");
   const [isValid, setIsValid] = useState(false);
   const [bingoCard, setBingoCard] = useState(null);
+  const [clickedNumbers, setClickedNumbers] = useState([]);
 
   function enterGame() {
     axios
@@ -101,6 +102,20 @@ function App() {
       });
   }
 
+  const clickNumber = (letter, number) => {
+    const updateNumbers = { ...clickedNumbers };
+
+    if (updateNumbers[letter] && updateNumbers[letter].includes(number)) {
+      updateNumbers[letter] = updateNumbers[letter].filter((n) => n !== number);
+    } else {
+      updateNumbers[letter] = updateNumbers[letter]
+        ? [...updateNumbers[letter], number]
+        : [number];
+    }
+
+    setClickedNumbers(updateNumbers);
+  };
+
   return (
     <>
       <Container
@@ -150,7 +165,15 @@ function App() {
                     <h1>{letter}</h1>
                     <div className="number-column">
                       {bingoCard.card[letter].map((number, index) => (
-                        <div key={index} className="number-box">
+                        <div
+                          key={index}
+                          className={`number-box ${
+                            clickedNumbers[letter]?.includes(number)
+                              ? "clicked"
+                              : ""
+                          }`}
+                          onClick={() => clickNumber(letter, number)}
+                        >
                           {number}
                         </div>
                       ))}
